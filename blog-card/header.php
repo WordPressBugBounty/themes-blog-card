@@ -20,8 +20,14 @@
 <div id="page" class="site">
 <a class="skip-link screen-reader-text" href="#content">
 <?php _e( 'Skip to content', 'blog-card' ); ?></a>
-    <div class="wrapper" id="custom-background-css">
-      <!--header--> 
+<?php $background_image = get_theme_support( 'custom-header', 'default-image' );
+  if ( has_header_image() ) { $background_image = get_header_image(); } ?>
+<!--wrapper-->
+<div class="wrapper" id="custom-background-css"> 
+    <?php if ( has_header_image() ) { ?>
+      <img src="<?php echo esc_url( $background_image ); ?>">
+    <?php } ?>
+    <!--header--> 
     <header class="bs-headfour">
       <div class="clearfix"></div>
       <!-- Main Menu Area-->
@@ -30,18 +36,17 @@
           <div class="container">
             <!-- Right nav -->
             <div class="navbar-header d-none d-lg-block">
-                  <?php the_custom_logo(); 
-                  if (display_header_text()) { ?>
-                    <div class="site-branding-text">
-                    <?php } else { ?>
-                    <div class="site-branding-text d-none">
-                    <?php } if (is_front_page() || is_home()) { ?>
+            <div class="site-logo">
+                  <?php if(get_theme_mod('custom_logo') !== ""){ the_custom_logo(); } ?>
+                </div>
+                <div class="site-branding-text <?php echo esc_attr( display_header_text() ? ' ' : 'd-none'); ?>">
+                  <?php if (is_front_page() || is_home() || is_archive()) { ?>
                     <h1 class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php echo esc_html(get_bloginfo( 'name' )); ?></a></h1>
-                    <?php } else { ?>
+                  <?php } else { ?>
                     <p class="site-title"> <a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php echo esc_html(get_bloginfo( 'name' )); ?></a></p>
-                    <?php } ?>
+                  <?php } ?>
                     <p class="site-description"><?php echo esc_html(get_bloginfo( 'description' )); ?></p>
-                    </div>
+                </div>
             </div>
             <!-- Mobile Header -->
             <div class="m-header align-items-center">
@@ -53,30 +58,21 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-                  <div class="navbar-header">
-                   <?php the_custom_logo(); 
-                  if (display_header_text()) { ?>
-                    <div class="site-branding-text">
-                    <?php } else { ?>
-                    <div class="site-branding-text d-none">
-                    <?php } if (is_front_page() || is_home()) { ?>
-                    <h1 class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php echo esc_html(get_bloginfo( 'name' )); ?></a></h1>
-                    <?php } else { ?>
-                    <p class="site-title"> <a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php echo esc_html(get_bloginfo( 'name' )); ?></a></p>
-                    <?php } ?>
-                    <p class="site-description"><?php echo esc_html(get_bloginfo( 'description' )); ?></p>
-                    </div>
+                <div class="navbar-header">
+                  <div class="site-logo">
+                    <?php if(get_theme_mod('custom_logo') !== ""){ the_custom_logo(); } ?>
                   </div>
-                  <div class="right-nav"> 
-                  <!-- /navbar-toggle -->
-                  <?php $blogarise_menu_search  = get_theme_mod('blogarise_menu_search','true'); 
-                  if($blogarise_menu_search == true) {
-                  ?>
-                    <a class="msearch ml-auto bs_model" data-bs-target="#exampleModal" href="#" data-bs-toggle="modal"> <i class="fa fa-search"></i> </a>
-               
-                  <?php } ?>
-                   </div>
-                </div>
+                  <div class="site-branding-text <?php echo esc_attr( display_header_text() ? ' ' : 'd-none'); ?>">
+                    <div class="site-title">
+                      <a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php echo esc_html(get_bloginfo( 'name' )); ?></a>
+                    </div>
+                    <p class="site-description"><?php echo esc_html(get_bloginfo( 'description' )); ?></p>
+                  </div>
+              </div>
+              <div class="right-nav"> 
+              <?php blogarise_menu_search(); ?>
+              </div>
+            </div>
             <!-- /Mobile Header -->
             <!-- Navigation -->
             <div class="collapse navbar-collapse" id="navbar-wp">
@@ -104,33 +100,24 @@
               </div>
             <!-- Right nav -->
             <div class="desk-header right-nav pl-3 ml-auto my-2 my-lg-0 position-relative align-items-center">
-              <?php $blogarise_menu_search  = get_theme_mod('blogarise_menu_search','true'); 
-                    $blogarise_subsc_link = get_theme_mod('blogarise_subsc_link', '#'); 
-                    $blogarise_menu_subscriber  = get_theme_mod('blogarise_menu_subscriber','true');
-                    $subsc_icon = get_theme_mod('subsc_icon_layout','bell');
-                    $blogarise_subsc_open_in_new  = get_theme_mod('blogarise_subsc_open_in_new', true);
-                  if($blogarise_menu_search == true) {
-                  ?>
-                <a class="msearch ml-auto bs_model" data-bs-target="#exampleModal" href="#" data-bs-toggle="modal">
-                    <i class="fa fa-search"></i>
-                  </a> 
-               <?php } if($blogarise_menu_subscriber == true) { ?>
-              <a class="subscribe-btn" href="<?php echo esc_url($blogarise_subsc_link); ?>" <?php if($blogarise_subsc_open_in_new) { ?> target="_blank" <?php } ?> ><i class="fas fa-<?php echo $subsc_icon ; ?>"></i></a>
-              <?php } $blogarise_lite_dark_switcher = get_theme_mod('blogarise_lite_dark_switcher','true');
-                if($blogarise_lite_dark_switcher == true){ ?>
-               <label class="switch" for="switch">
-                <input type="checkbox" name="theme" id="switch">
-                <span class="slider"></span>
-              </label>
-              <?php } ?>         
+              <?php blogarise_menu_btns(); ?>
             </div>
           </div>
         </nav>
       </div>
       <!--/main Menu Area-->
     </header>
-    <!-- Add News ticker -->
-<!--mainfeatured end-->
+  <!--mainfeatured start-->
+  <div class="mainfeatured">
+        <!--container-->
+        <div class="container">
+            <!--row-->
+            <div class="row">              
+                <?php do_action('blogarise_action_front_page_main_section_1'); ?>  
+            </div><!--/row-->
+        </div><!--/container-->
+    </div>
+    <!--mainfeatured end-->
 <?php
 do_action('blogarise_action_featured_ads_section');
 ?>   

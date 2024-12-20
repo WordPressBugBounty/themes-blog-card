@@ -1,4 +1,4 @@
-html[data-theme='dark'] {
+body.dark {
   --head-color: #fff;
   --stext-color: #fff;
   --text-color: #fff;

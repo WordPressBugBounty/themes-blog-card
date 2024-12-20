@@ -14,64 +14,38 @@ get_header(); ?>
     <div class="container">
         <!--row-->
         <div class="row">
-                    <!--col-md-8-->
-                    <?php 
-                    $blogcard_content_layout = esc_attr(get_theme_mod('blogcard_content_layout','align-content-right'));
-                    if($blogcard_content_layout == "align-content-left")
-                    { ?>
-                    <aside class="col-lg-4">
-                        <?php get_sidebar();?>
-                    </aside>
-                    <?php }
-                    elseif($blogcard_content_layout == "grid-left-sidebar")
-                    { ?>
-                    <aside class="col-lg-4">
-                        <?php get_sidebar();?>
-                    </aside>
-                    <?php }
-                    if($blogcard_content_layout == "align-content-right"){ ?>
-                    <div class="col-lg-8 content-right">
-                        <?php get_template_part('template-parts/content', get_post_format()); ?>
-                    </div>
-                    <?php } elseif($blogcard_content_layout == "align-content-left") { ?>
-                    <div class="col-lg-8 content-right">
-                        <?php get_template_part('template-parts/content', get_post_format()); ?>
-                    </div>
-                    <?php } elseif($blogcard_content_layout == "full-width-content") { ?>
-                     <div class="col-md-12">
-                        <?php get_template_part('template-parts/content', get_post_format()); ?>
-                    </div>
-                     <?php }  if($blogcard_content_layout == "grid-left-sidebar"){ ?>
-                    <div class="col-lg-8 content-right">
-                        <?php get_template_part('content','grid'); ?>
-                    </div>
-                    <?php } elseif($blogcard_content_layout == "grid-right-sidebar") { ?>
-                    <div class="col-lg-8 content-right">
-                        <?php get_template_part('content','grid'); ?>
-                    </div>
-                    <?php } elseif($blogcard_content_layout == "grid-fullwidth") { ?>
-                     <div class="col-md-12">
-                       <?php get_template_part('content','grid'); ?>
-                    </div>
-                     <?php }  ?>
-                    
-                    <!--/col-md-8-->
-                    <?php if($blogcard_content_layout == "align-content-right")  { ?>
-                    <!--col-md-4-->
-                    <aside class="col-lg-4 sidebar-right">
-                        <?php get_sidebar();?>
-                    </aside>
-                    <!--/col-md-4-->
-                    <?php } 
-                    elseif($blogcard_content_layout == "grid-right-sidebar")
-                    { ?>
-                    <aside class="col-lg-4 sidebar-right">
-                        <?php get_sidebar();?>
-                    </aside>
-                    <?php }?>
+            <!--col-md-8-->
+            <?php 
+            $blogcard_content_layout = esc_attr(get_theme_mod('blogcard_content_layout','align-content-right'));
+            if(($blogcard_content_layout == "align-content-left") || ($blogcard_content_layout == "grid-left-sidebar")) { ?>
+            <aside class="col-lg-4 sidebar-right">
+                <?php get_sidebar();?>
+            </aside>
+            <?php } if( ($blogcard_content_layout == "align-content-right")|| ($blogcard_content_layout == "align-content-left")) { ?>
+            <div class="col-lg-8 content-right">
+                <?php get_template_part('template-parts/content', get_post_format()); ?>
+            </div>
+            <?php } elseif($blogcard_content_layout == "full-width-content") { ?>
+                <div class="col-md-12">
+                <?php get_template_part('template-parts/content', get_post_format()); ?>
+            </div>
+                <?php } if(($blogcard_content_layout == "grid-left-sidebar")|| ($blogcard_content_layout == "grid-right-sidebar")) { ?>
+            <div class="col-lg-8 content-right">
+                <?php get_template_part('content','grid'); ?>
+            </div>
+            <?php } elseif($blogcard_content_layout == "grid-fullwidth") { ?>
+                <div class="col-md-12">
+                <?php get_template_part('content','grid'); ?>
+            </div>
+                <?php } ?>
+            <!--/col-md-8-->
+            <?php if(($blogcard_content_layout == "align-content-right") || ($blogcard_content_layout == "grid-right-sidebar")) { ?>
+            <aside class="col-lg-4 sidebar-right">
+                <?php get_sidebar();?>
+            </aside>
+            <?php }?>
         </div><!--/row-->
     </div><!--/container-->
 </main>                
 <?php
 get_footer();
-?>

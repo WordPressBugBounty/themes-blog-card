@@ -223,8 +223,6 @@ if ( ! class_exists( 'blogcard_Toggle_Control' ) ) {
     }
 }
     
-    
-
     /*--- Site title Font size **/
     $wp_customize->add_setting('blogcard_title_font_size',
         array(
@@ -234,7 +232,6 @@ if ( ! class_exists( 'blogcard_Toggle_Control' ) ) {
             'priority' => 50,
         )
     );
-
     $wp_customize->add_control('blogcard_title_font_size',
         array(
             'label'    => esc_html__('Site Title Size', 'blog-card'),
@@ -243,26 +240,23 @@ if ( ! class_exists( 'blogcard_Toggle_Control' ) ) {
         )
     );
 
+    // Setting - show_main_news_section.
+    $wp_customize->add_setting('show_main_news_section',
+        array(
+            'default' => 1,
+            'capability' => 'edit_theme_options',
+            'sanitize_callback' => 'blogarise_sanitize_checkbox',
+        )
+    );
+    $wp_customize->add_control('show_main_news_section',
+        array(
+            'label' => esc_html__('Enable Slider Banner Section', 'blog-card'),
+            'section' => 'frontpage_main_banner_section_settings',
+            'type' => 'checkbox',
+            'priority' => 10,
 
-
-            // Setting - show_main_news_section.
-        $wp_customize->add_setting('show_main_news_section',
-            array(
-                'default' => 1,
-                'capability' => 'edit_theme_options',
-                'sanitize_callback' => 'blogarise_sanitize_checkbox',
-            )
-        );
-
-        $wp_customize->add_control('show_main_news_section',
-            array(
-                'label' => esc_html__('Enable Slider Banner Section', 'blog-card'),
-                'section' => 'frontpage_main_banner_section_settings',
-                'type' => 'checkbox',
-                'priority' => 10,
-
-            )
-        ); 
+        )
+    ); 
 
     $wp_customize->add_setting(
         'blogcard_content_layout', array(

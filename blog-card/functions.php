@@ -33,6 +33,10 @@ function blogcard_theme_setup() {
     require( get_stylesheet_directory() . '/font.php');
     
     require( get_stylesheet_directory() . '/frontpage-options.php');
+
+    add_theme_support( "title-tag" );
+
+    add_theme_support( 'automatic-feed-links' );
 }
 
 add_action( 'after_setup_theme', 'blogcard_theme_setup' );
@@ -80,149 +84,93 @@ function blogcard_admin_scripts() {
 endif;
 add_action( 'admin_enqueue_scripts', 'blogcard_admin_scripts' );
 
+
 /**
-* banner additions.
-*/
-
-if (!function_exists('blogcard_get_block')) :
-    /**
-     *
-     * @param null
-     *
-     * @return null
-     *
-     * @since blogcard 1.0.0
-     *
-     */
-    function blogcard_get_block($block = 'grid', $section = 'post')
-    {
-
-        get_template_part('hooks/blocks/block-' . $section, $block);
-
-    }
-endif;
-
-
-
-function blogcard_theme_option( $wp_customize )
-{
-
-    /**
- * Customize Control for Radio Image.
+ * Register widget area.
  *
- * @since 1.0.0
- *
- * @see WP_Customize_Control
+ * @link https://developer.wordpress.org/themes/functionality/sidebars/#registering-a-sidebar
  */
-class blogcard_Radio_Image_Control extends WP_Customize_Control {
+function blog_card_widgets_init() {
 
-    /**
-     * Control type.
-     *
-     * @access public
-     * @var string
-     */
-    public $type = 'radio-image';
+	$blog_card_footer_column_layout = esc_attr(get_theme_mod('blogarise_footer_column_layout',3));
+	
+	$blog_card_footer_column_layout = 12 / $blog_card_footer_column_layout;
+	
+	register_sidebar( array(
+		'name'          => esc_html__( 'Sidebar Widget Area', 'blog-card' ),
+		'id'            => 'sidebar-1',
+		'description'   => '',
+		'before_widget' => '<div id="%1$s" class="bs-widget %2$s">',
+		'after_widget'  => '</div>',
+		'before_title'  => '<div class="bs-widget-title"><h2 class="title">',
+		'after_title'   => '</h2></div>',
+	) );
+	register_sidebar( array(
+		'name'          => esc_html__( 'Footer Widget Area', 'blog-card' ),
+		'id'            => 'footer_widget_area',
+		'description'   => '',
+		'before_widget' => '<div id="%1$s" class="col-md-'.$blog_card_footer_column_layout.' rotateInDownLeft animated bs-widget %2$s">',
+		'after_widget'  => '</div>',
+		'before_title'  => '<div class="bs-widget-title"><h2 class="title">',
+		'after_title'   => '</h2></div>',
+	) );
 
-    /**
-     * Render content.
+}
+add_action( 'widgets_init', 'blog_card_widgets_init' );
+
+function blogcard_theme_option( $wp_customize ){
+
+        /**
+     * Customize Control for Radio Image.
      *
      * @since 1.0.0
+     *
+     * @see WP_Customize_Control
      */
-    public function render_content() {
+    class blogcard_Radio_Image_Control extends WP_Customize_Control {
 
-        if ( empty( $this->choices ) ) {
-            return;
-        }
+        /**
+         * Control type.
+         *
+         * @access public
+         * @var string
+         */
+        public $type = 'radio-image';
 
-        $name = '_customize-radio-' . $this->id;
+        /**
+         * Render content.
+         *
+         * @since 1.0.0
+         */
+        public function render_content() {
 
-        ?>
-        <label>
-            <?php if ( ! empty( $this->label ) ) : ?>
-                <span class="customize-control-title"><?php echo esc_html( $this->label ); ?></span>
-            <?php endif; ?>
-            <?php if ( ! empty( $this->description ) ) : ?>
-                <span class="description customize-control-description"><?php echo esc_html($this->description); ?></span>
-            <?php endif; ?>
-
-            <?php foreach ( $this->choices as $value => $label ) : ?>
-                <label>
-                    <input type="radio" value="<?php echo esc_attr( $value ); ?>" <?php $this->link();
-                    checked( $this->value(), $value ); ?> class="np-radio-image" name="<?php echo esc_attr( $name ); ?>"/>
-                    <span><img src="<?php echo esc_url( $label ); ?>" alt="<?php echo esc_attr( $value ); ?>" /></span>
-                </label>
-            <?php endforeach; ?>
-        </label>
-        <?php
-    }
-}
-
-/**
- * Customizer Control: toggle.
- */
-
-// Exit if accessed directly.
-if ( ! defined( 'ABSPATH' ) ) {
-    exit;
-}
-
-if ( ! class_exists( 'blogcard_Toggle_Control' ) ) {
-
-    /**
-     * Toggle control (modified checkbox).
-     */
-    class blogcard_Toggle_Control extends Wp_Customize_Control {
-
-        public $type = 'toggle';
-        
-        public $tooltip = '';
-        
-        public function to_json() {
-            parent::to_json();
-            
-            if ( isset( $this->default ) ) {
-                $this->json['default'] = $this->default;
-            } else {
-                $this->json['default'] = $this->setting->default;
+            if ( empty( $this->choices ) ) {
+                return;
             }
-            
-            $this->json['value']   = $this->value();
-            $this->json['link']    = $this->get_link();
-            $this->json['id']      = $this->id;
-            $this->json['tooltip'] = $this->tooltip;
-                        
-            $this->json['inputAttrs'] = '';
-            foreach ( $this->input_attrs as $attr => $value ) {
-                $this->json['inputAttrs'] .= $attr . '="' . esc_attr( $value ) . '" ';
-            }
-        }
-        
-        public function enqueue() {            
-            wp_enqueue_style( 'blogarise-toggle', get_template_directory_uri() . '/inc/ansar/custom-control/toggle/toggle.css', null );
-            wp_enqueue_script( 'blogarise-toggle', get_template_directory_uri() . '/inc/ansar/custom-control/toggle/toggle.js', array( 'jquery' ), false, true ); //for toggle        
-        }
-        
-        protected function content_template() {
+
+            $name = '_customize-radio-' . $this->id;
+
             ?>
-            <# if ( data.tooltip ) { #>
-                <a href="#" class="tooltip hint--left" data-hint="{{ data.tooltip }}"><span class='dashicons dashicons-info'></span></a>
-            <# } #>
-            <label for="toggle_{{ data.id }}">
-                <span class="customize-control-title">
-                    {{{ data.label }}}
-                </span>
-                <# if ( data.description ) { #>
-                    <span class="description customize-control-description">{{{ data.description }}}</span>
-                <# } #>
-                <input {{{ data.inputAttrs }}} name="toggle_{{ data.id }}" id="toggle_{{ data.id }}" type="checkbox" value="{{ data.value }}" {{{ data.link }}}<# if ( '1' == data.value ) { #> checked<# } #> hidden />
-                <span class="switch"></span>
+            <label>
+                <?php if ( ! empty( $this->label ) ) : ?>
+                    <span class="customize-control-title"><?php echo esc_html( $this->label ); ?></span>
+                <?php endif; ?>
+                <?php if ( ! empty( $this->description ) ) : ?>
+                    <span class="description customize-control-description"><?php echo esc_html($this->description); ?></span>
+                <?php endif; ?>
+
+                <?php foreach ( $this->choices as $value => $label ) : ?>
+                    <label>
+                        <input type="radio" value="<?php echo esc_attr( $value ); ?>" <?php $this->link();
+                        checked( $this->value(), $value ); ?> class="np-radio-image" name="<?php echo esc_attr( $name ); ?>"/>
+                        <span><img src="<?php echo esc_url( $label ); ?>" alt="<?php echo esc_attr( $value ); ?>" /></span>
+                    </label>
+                <?php endforeach; ?>
             </label>
             <?php
         }
     }
-}
-    
+
     /*--- Site title Font size **/
     $wp_customize->add_setting('blogcard_title_font_size',
         array(

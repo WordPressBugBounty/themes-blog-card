@@ -562,6 +562,9 @@ blockquote p {
     background: var(--grady-color);
     border-color: #000;
 }
+.wp-block-latest-comments a:hover {
+	color: var(--pri-color);
+}
 .wp-block-latest-comments__comment-meta {
     color: var(--text-color);
 }

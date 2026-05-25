@@ -1,11 +1,11 @@
 ﻿=== Blog Card ===
 Contributors: Themeansar
 Tags: blog, portfolio, news, grid-Layout, one-column, two-columns, three-columns, flexible-header, left-sidebar, right-sidebar, custom-background, custom-colors, custom-logo, custom-menu, featured-images, footer-widgets, full-width-template, post-formats, rtl-language-support, theme-options, sticky-post, threaded-comments, translation-ready, block-styles, wide-blocks
-Requires at least: 5.4
+Requires at least: 6.0
 Requires PHP: 7.4
-Tested up to: 6.7
-Stable tag: 0.7
-Version: 0.7
+Tested up to: 6.9
+Stable tag: 0.8
+Version: 0.8
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -77,3 +77,6 @@ Blog Card includes support for WooCommerce and Contact From 7.
 
 = 0.7 =
 * Fixed Header Image Issue.
+
+= 0.8 =
+* Added Theme Support.
